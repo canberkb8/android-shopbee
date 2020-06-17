@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.shp.shopbee.MainActivity;
 import com.shp.shopbee.R;
@@ -35,6 +36,7 @@ public class HomePageFragment extends BaseFragment {
     private FragmHomepageBinding binding;
     private AdapterPostData adapterPostData;
     private ArrayList<PostDataModel> arrayList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +50,10 @@ public class HomePageFragment extends BaseFragment {
             binding.txtSignIn.setVisibility(View.VISIBLE);
         }
         clicks();
+
+        binding.recyclerHomePage.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        binding.recyclerHomePage.setHasFixedSize(true);
+
         loadHomePageData();
 
 
@@ -61,13 +67,12 @@ public class HomePageFragment extends BaseFragment {
         PostService postService=new PostService(activity, arrayList,new PostService.PostSuccessListener() {
             @Override
             public void onGetPostSuccessListener() {
+
                 adapterPostData =new AdapterPostData(activity,arrayList);
                 selectionsort(arrayList);
-                ShopBeeAppData.getInstance().setAdapterPostData(adapterPostData);
-                adapterPostData=ShopBeeAppData.getInstance().getAdapterPostData();
-                binding.recyclerHomePage.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-                binding.recyclerHomePage.setHasFixedSize(true);
                 binding.recyclerHomePage.setAdapter(adapterPostData);
+                binding.recyclerHomePage.getLayoutManager().scrollToPosition(ShopBeeAppData.getInstance().getUpdatedPosition());
+
             }
         });
         postService.getPostDataRequest();

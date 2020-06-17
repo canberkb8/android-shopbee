@@ -21,19 +21,9 @@ public class ShopBeeAppData {
         return ourInstance;
     }*/
 
-    private AdapterPostData adapterPostData;
 
-    public ShopBeeAppData(AdapterPostData adapterPostData) {
-        this.adapterPostData = adapterPostData;
-    }
 
-    public AdapterPostData getAdapterPostData() {
-        return adapterPostData;
-    }
 
-    public void setAdapterPostData(AdapterPostData adapterPostData) {
-        this.adapterPostData = adapterPostData;
-    }
 
     private User user;
 
@@ -127,5 +117,15 @@ public class ShopBeeAppData {
 
     public void setProductKey(String strProductKey) {
         this.strProductKey = strProductKey;
+    }
+
+    private int updatedPosition;
+
+    public int getUpdatedPosition() {
+        return updatedPosition;
+    }
+
+    public void setUpdatedPosition(int updatedPosition) {
+        this.updatedPosition = updatedPosition;
     }
 }

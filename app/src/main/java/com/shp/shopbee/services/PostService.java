@@ -59,15 +59,19 @@ public class PostService {
                         }
                         postData.setStrLikeCount(String.valueOf(likeCount));
                         postDataModelArrayList.add(postData);
-                        listenerSuccess.onGetPostSuccessListener();
+
                     }
+
+                    listenerSuccess.onGetPostSuccessListener();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                databaseError.toException().printStackTrace();
             }
+
+
         });
         return postDataModelArrayList;
 

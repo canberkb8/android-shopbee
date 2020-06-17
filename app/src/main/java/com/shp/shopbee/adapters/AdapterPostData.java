@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +27,7 @@ import com.shp.shopbee.models.CommentModel;
 import com.shp.shopbee.models.PostDataModel;
 import com.shp.shopbee.models.SharedModel;
 import com.shp.shopbee.models.ShopBeeAppData;
+import com.shp.shopbee.services.PostService;
 
 import org.w3c.dom.Comment;
 
@@ -33,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class AdapterPostData extends RecyclerView.Adapter<AdapterPostData.ViewHolderHomePage> {
-
 
     //Global Kısım
     private MainActivity activity;
@@ -60,7 +61,7 @@ public class AdapterPostData extends RecyclerView.Adapter<AdapterPostData.ViewHo
     //Her bir item'ı UI'da gösterdiğin method, (db'den dönen datanın atamaları)
     @Override
     public void onBindViewHolder(@NonNull ViewHolderHomePage holder, int position) {
-        PostDataModel postDataModel =homePageArrayList.get(position);//ArrayList'i HomePageFragmentta doldurduk
+        PostDataModel postDataModel =homePageArrayList.get(position);   //ArrayList'i HomePageFragmentta doldurduk
         holder.bind(postDataModel,position);
     }
 
@@ -78,7 +79,7 @@ public class AdapterPostData extends RecyclerView.Adapter<AdapterPostData.ViewHo
             super(binding.getRoot());
             this.rowBinding = rowBinding;
         }
-        private void bind(final PostDataModel postDataModel, int position){
+        private void bind(final PostDataModel postDataModel, final int position){
 
             if (postDataModel.isLike()){
                 rowBinding.imgLike.setVisibility(View.INVISIBLE);
@@ -160,6 +161,9 @@ public class AdapterPostData extends RecyclerView.Adapter<AdapterPostData.ViewHo
                         MainActivity.mDatabase.getReference().child("product").child(postDataModel.getStrProductKey().trim()).child("strComments").child(key).setValue(commentModel);
                         Toast.makeText(activity,"Comment Successful",Toast.LENGTH_SHORT).show();
                         rowBinding.edtTxtComment.setText("");
+
+                        ShopBeeAppData.getInstance().setUpdatedPosition(position);
+                        homePageArrayList.clear();
                     }
                 }
             });
@@ -171,7 +175,16 @@ public class AdapterPostData extends RecyclerView.Adapter<AdapterPostData.ViewHo
                 rowBinding.imgLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity.mDatabase.getReference().child("product").child(postDataModel.getStrProductKey().trim()).child("strLike").child(Objects.requireNonNull(MainActivity.mAuth.getUid())).setValue(true);
+                    MainActivity.mDatabase.getReference()
+                            .child("product")
+                            .child(postDataModel.getStrProductKey().trim())
+                            .child("strLike")
+                            .child(Objects.requireNonNull(MainActivity.mAuth.getUid()))
+                            .setValue(true);
+
+                    ShopBeeAppData.getInstance().setUpdatedPosition(position);
+                    homePageArrayList.clear();
+
                     rowBinding.txtLike.setText((Integer.parseInt(postDataModel.getStrLikeCount())+1)+" Like");
                     rowBinding.imgLike.setVisibility(View.INVISIBLE);
                     rowBinding.imgRedlike.setVisibility(View.VISIBLE);
@@ -180,11 +193,21 @@ public class AdapterPostData extends RecyclerView.Adapter<AdapterPostData.ViewHo
             }else{
                 rowBinding.imgLike.setVisibility(View.INVISIBLE);
                 rowBinding.txtLike.setVisibility(View.INVISIBLE);
-            }if(MainActivity.myPreferences.isLoggedIn()){
+            }
+            if(MainActivity.myPreferences.isLoggedIn()){
                 rowBinding.imgRedlike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity.mDatabase.getReference().child("product").child(postDataModel.getStrProductKey().trim()).child("strLike").child(Objects.requireNonNull(MainActivity.mAuth.getUid())).removeValue();
+                    MainActivity.mDatabase.getReference()
+                            .child("product")
+                            .child(postDataModel.getStrProductKey().trim())
+                            .child("strLike")
+                            .child(Objects.requireNonNull(MainActivity.mAuth.getUid()))
+                            .removeValue();
+
+                    ShopBeeAppData.getInstance().setUpdatedPosition(position);
+                    homePageArrayList.clear();
+
                     rowBinding.txtLike.setText(Integer.parseInt(postDataModel.getStrLikeCount())+" Like");
                     rowBinding.imgLike.setVisibility(View.VISIBLE);
                     rowBinding.imgRedlike.setVisibility(View.INVISIBLE);
