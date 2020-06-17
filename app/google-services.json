@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "774159954821",
+    "firebase_url": "https://fb-shopbee.firebaseio.com",
+    "project_id": "fb-shopbee",
+    "storage_bucket": "fb-shopbee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774159954821:android:2400042a149ff4f5",
+        "android_client_info": {
+          "package_name": "com.shp.shopbee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774159954821-ntip4iskf0mo5auv26q2q36oq1fe4kpp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shp.shopbee",
+            "certificate_hash": "7ed76cafda1e213ac73923c8fde52bedf78770f7"
+          }
+        },
+        {
+          "client_id": "774159954821-h9d4jpim3qk5kn95evfn665plj156bpc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_1WqXfceOZHqL92_EJ75_tlwApnVVlJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774159954821-h9d4jpim3qk5kn95evfn665plj156bpc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
